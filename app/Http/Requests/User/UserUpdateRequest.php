@@ -15,7 +15,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->user_type == User::USER_ADMIN;
     }
 
     /**
@@ -33,7 +33,7 @@ class UserUpdateRequest extends FormRequest
             'password' =>  'nullable|string|min:3|max:50',
             'email' =>  "required|unique:users,email,{$this->user->id}",
             'user-type' => "required|in:$userTypes",
-            'status' => 'required|boolean'
+            'status' => 'required|in:true,false'
         ];
     }
 

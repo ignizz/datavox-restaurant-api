@@ -34,14 +34,6 @@ return new class extends Migration
             'user_type' => User::USER_ADMIN,
             'password' => Hash::make('Kareem.01@')
         ]);
-        User::create([
-            'first_name' => 'Gerardo',
-            'last_name' => 'Mata',
-            'username' => 'gbutters',
-            'email' => 'gera90nike@gmail.com',
-            'user_type' => User::USER_ADMIN,
-            'password' => Hash::make('0987654321')
-        ]);
     }
 
     /**

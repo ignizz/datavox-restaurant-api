@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -13,44 +14,38 @@ class AuthController extends Controller
 
     /**
      * @author Kareem Lorenzana
-     * @created 2023-05-19
+     * @created 2023-10-17
      * @params App\Models\User
      * @return void
      * Initialize vars for current controller
      */
-    public function __construct(User $user){
+    public function __construct(Employee $user){
         $this->user = $user;
     }
 
     /**
      * @author Kareem Lorenzana
-     * @created 2023-05-19
+     * @created 2023-10-17
      * @params App\Models\User, Illuminate\Http\Request
      * @return Illuminate\Http\JsonResponse
      *login application for user request
      */
     public function login (Request $request)
     {
-        $user = $this->user->where('username', $request->username)->where("status", User::STATUS_ACTIVE)->first();
+        $user = $this->user->where('clave', $request->username)->where("status", Employee::STATUS_ALTA)->first();
         if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['token' => $token];
-                return response()->json($response, parent::SUCCESS_RESPONSE);
-            } else {
-                $response = ["message" => "Usuario o contraseña incorrectas"];
-                return response()->json($response, parent::UNPROCESSABLE_ENTITY_RESPONSE);
-            }
+            $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+            $response = ['token' => $token];
+            return response()->json($response, parent::SUCCESS_RESPONSE);
         } else {
-            dd($request->all());
-            $response = ["message" =>'El usuario no existe'];
+            $response = ["message" => "Usuario incorrecto"];
             return response()->json($response, parent::UNPROCESSABLE_ENTITY_RESPONSE);
         }
     }
 
     /**
      * @author Kareem Lorenzana
-     * @created 2023-05-19
+     * @created 2023-10-17
      * @params App\Models\User
      * @return Illuminate\Http\JsonResponse
      * logout application for current user
@@ -69,14 +64,15 @@ class AuthController extends Controller
 
     /**
      * @author Kareem Lorenzana
-     * @created 2023-05-19
+     * @created 2023-10-17
      * @params
      * @return Illuminate\Http\JsonResponse
      * get current profile information for autenticate user
      */
     public function profile()
     {
-        $data = (object)["data" => auth()->user()];
+        $user = $this->user->with(USER::RELATIONS)->find(auth()->user()->id);
+        $data = (object)["data" => $user];
         return response()->json($data, parent::SUCCESS_RESPONSE);
     }
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Connection;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserFilterRequest extends FormRequest
+class ConnectionFilterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

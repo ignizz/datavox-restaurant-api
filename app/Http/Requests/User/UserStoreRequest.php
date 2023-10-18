@@ -15,7 +15,7 @@ class UserStoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->check() && auth()->user()->user_type == User::USER_ADMIN;
     }
 
     /**

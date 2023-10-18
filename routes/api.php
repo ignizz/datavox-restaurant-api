@@ -3,11 +3,14 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ToolController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PaperTypeController;
+use App\Http\Controllers\ConnectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +42,10 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/admin/users/create', [UserController::class, 'store'])->name('api.admin.users.store');
     Route::get('/admin/users/edit/{user}', [UserController::class, 'edit'])->name('api.admin.users.edit');
     Route::put('/admin/users/edit/{user}', [UserController::class, 'update'])->name('api.admin.users.update');
+    //connections admin
 
 });
 
-//logout is allowed
 Route::post('logout', [AuthController::class, 'logout'])->name('api.logout');
 
 

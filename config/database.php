@@ -77,6 +77,20 @@ return [
             'search_path' => 'public',
             'sslmode' => 'prefer',
         ],
+        'dinamic_connection' => [
+            'driver' => 'pgsql',
+            'url' => env('DATABASE_URL'),
+            'host' => '127.0.0.1',
+            'port' => '5432',
+            'database' => 'forge',
+            'username' => 'forge',
+            'password' => '',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
+        ],
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',

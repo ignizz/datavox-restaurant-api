@@ -4,16 +4,15 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Passport\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Requests\User\UserFilterRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
-
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * @author Kareem Lorenzana
@@ -29,7 +28,7 @@ class User extends Authenticatable
         self::USER_WRITER,
         self::USER_ADMIN
     ];
-    const RELATIONS = [];
+    const RELATIONS = ["connections"];
     /**
      * The attributes that are mass assignable.
      *
@@ -66,14 +65,25 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-       /**
+    /**
+     * @author Kareem Lorenzana
+     * @created 2023/06/07
+     * The connections that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function connections():BelongsToMany
+    {
+        return $this->belongsToMany(Connection::class, 'connection_user', 'user_id', 'connection_id');
+    }
+
+    /**
      * @author Kareem Lorenzana
      * @created 2023-05-18
      * @params App\Http\Requests\UserFilterRequest
      * @return Illuminate\Database\Eloquent\Builder
      * Filter data for users list
      */
-
      public function filterData(UserFilterRequest $request){
         $users = $this->with(self::RELATIONS);
         $filter = $request->filter;
@@ -84,8 +94,7 @@ class User extends Authenticatable
                     ->orWhere('email','like', '%'.trim($filter).'%')
                     ->orWhere('first_name','like', '%'.trim($filter).'%')
                     ->orWhere('last_name','like', '%'.trim($filter).'%')
-                    ->orWhere('user_type','like', '%'.trim($filter).'%')
-                    ->orWhere('id', trim($filter));
+                    ->orWhere('user_type','like', '%'.trim($filter).'%');
         });
        }
 

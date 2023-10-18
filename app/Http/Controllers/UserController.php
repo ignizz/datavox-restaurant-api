@@ -63,6 +63,9 @@ class UserController extends Controller
             $user = $userData;
         }else{
             $user = $this->user->create($userData);
+            if($request->connections && is_array($request->connections)){
+                $user->connections()->sync($request->connections);
+            }
         }
         return response()->json(["data" => $user], parent::SUCCESS_RESPONSE);
     }
@@ -75,6 +78,7 @@ class UserController extends Controller
      * return user information for update
      */
     public function edit(User $user){
+        $user = $this->user->with(USER::RELATIONS)->find($user->id);
         return response()->json(["data" => $user], parent::SUCCESS_RESPONSE);
     }
     /**
@@ -105,11 +109,15 @@ class UserController extends Controller
                 $user->password = Hash::make($request->password);
             }
         }
-
         if($request->test === "ok"){
             $user = $userData;
         }else{
-            $user = $user->save();
+            $user->save();
+            if($request->connections && is_array($request->connections)){
+                $user->connections()->sync($request->connections);
+            }else{
+                $user->connections()->delete();
+            }
         }
         return response()->json(["data" => $user], parent::SUCCESS_RESPONSE);
     }
