@@ -71,8 +71,8 @@ class AuthController extends Controller
      */
     public function profile()
     {
-        $user = $this->user->with(USER::RELATIONS)->find(auth()->user()->id);
-        $data = (object)["data" => $user];
+
+        $data = (object)["data" => auth()->user()];
         return response()->json($data, parent::SUCCESS_RESPONSE);
     }
 
