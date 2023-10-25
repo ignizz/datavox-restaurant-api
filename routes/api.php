@@ -11,6 +11,7 @@ use App\Http\Controllers\SellerController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PaperTypeController;
 use App\Http\Controllers\ConnectionController;
+use App\Http\Controllers\RestaurantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/admin/users/edit/{user}', [UserController::class, 'edit'])->name('api.admin.users.edit');
     Route::put('/admin/users/edit/{user}', [UserController::class, 'update'])->name('api.admin.users.update');
     //connections admin
+
+    //ruta api para cargar datos de las mesas:
+    Route::any('/tables', [RestaurantController::class, 'list'])->name('api.table.list');
 
 });
 
